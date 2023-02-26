@@ -17,12 +17,13 @@ const SignUpScreen = ({ navigation }) => {
         const { email, password } = values
 
         try {
-            await auth().createUserWithEmailAndPassword(email, password)
+            if (email)
+                await auth().createUserWithEmailAndPassword(email, password)
             console.log("USER ACCOUNT CREATED")
         } catch (error) {
             if (error.code === 'auth/email-already-in-use') {
                 Alert.alert(
-                    'That email address is already inuse'
+                    'That email address is already in use!'
                 )
             }
             if (error.code === 'auth/invalid-email') {

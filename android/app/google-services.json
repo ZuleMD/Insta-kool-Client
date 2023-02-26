@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "560988453952-cm6bgv9eu6annr3e5oi0b94b0k508r8t.apps.googleusercontent.com",
+          "client_id": "560988453952-mm60167qs20v1a3s8d6ci5dhsr3fhlt3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.instakooldelivery",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "560988453952-vmoo9u50e20gcukqvp17r9sf1cmrnedi.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

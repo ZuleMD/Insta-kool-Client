@@ -9,7 +9,8 @@ export const colors = {
     CardComment: "#86939e",
     cardbackground: "white",
     statusbar: "#89CFF0",
-    headerText: "white"
+    headerText: "white",
+    lightgreen: '#66DF48',
 }
 
 export const parameters = {
@@ -26,7 +27,7 @@ export const parameters = {
         width: '100%',
     },
     buttonStyleFacebook: {
-        backgroundColor: '#4267B2',
+        backgroundColor: '#6a89c8',
         alignContent: 'center',
         justifyContent: 'center',
         borderRadius: 12,
@@ -37,7 +38,7 @@ export const parameters = {
         width: '100%',
     },
     buttonStyleGoogle: {
-        backgroundColor: '#d44638',
+        backgroundColor: '#df766d',
         alignContent: 'center',
         justifyContent: 'center',
         borderRadius: 12,
@@ -60,4 +61,30 @@ export const title = {
     color: "#89CFF0",
     fontSize: 20,
     fontWeight: "bold"
+}
+
+export const fonts = {
+    ios: {
+        regular: 'System',
+        light: 'System',
+        lightItalic: 'System',
+        bold: 'System',
+        boldItalic: 'System',
+        black: 'System',
+        blackItalic: 'System',
+    },
+    android: {
+        regular: 'Roboto',
+        italic: 'Roboto-Italic',
+        thin: 'Roboto-Thin',
+        thinItalic: 'Roboto-ThinItalic',
+        light: 'Roboto-Light',
+        lightItalic: 'Roboto-LightItalic',
+        medium: 'Roboto-Medium',
+        mediumItalic: 'Roboto-MediumItalic',
+        bold: 'Roboto-Bold',
+        boldItalic: 'Roboto-BoldItalic',
+        condensed: 'RobotoCondensed-Regular',
+        condensedItalic: 'RobotoCondensed-Italic',
+    }
 }

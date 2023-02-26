@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity, Image, Alert } from 'react-native'
 import { colors, parameters, title } from "../../global/styles"
 import Header from "../../components/Header"
@@ -7,6 +7,8 @@ import Icon from 'react-native-ionicons';
 import { Formik } from 'formik';
 import auth from '@react-native-firebase/auth'
 import { AccessToken, LoginManager } from 'react-native-fbsdk'
+
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 
 export default function SignInScreen({ navigation }) {
     const [textInput2Focused, setTextInput2Focused] = useState(false)
@@ -17,10 +19,20 @@ export default function SignInScreen({ navigation }) {
     async function signIn(data) {
         try {
             const { password, email } = data
-            const user = await auth().signInWithEmailAndPassword(email, password)
-            if (user) {
-                console.log("Signed in")
+
+            if (email != "" && password != "") {
+                const user = await auth().signInWithEmailAndPassword(email, password)
+                if (user) {
+                    console.log("Signed in")
+                }
+            } else if (email == "") {
+                Alert.alert("Error", "Email cannot be empty ")
             }
+            else if (password == "") {
+                Alert.alert("Error", "Password cannot be empty ")
+
+            }
+
         }
         catch (error) {
             Alert.alert(
@@ -31,7 +43,7 @@ export default function SignInScreen({ navigation }) {
 
     }
 
-    async function signInWithfb() {
+    async function signInWithFacebook() {
         try {
             // Login the User and get his public profile and email id.
             const result = await LoginManager.logInWithPermissions([
@@ -52,6 +64,10 @@ export default function SignInScreen({ navigation }) {
             // If we don't get the access token, then something has went wrong.
             if (!data) {
                 throw 'Something went wrong obtaining access token';
+            } else {
+
+                console.log("Signed in")
+
             }
 
             // Use the Access Token to create a facebook credential.
@@ -68,6 +84,24 @@ export default function SignInScreen({ navigation }) {
         }
     }
 
+    async function signInWithGoogle() {
+        {
+            GoogleSignin.configure({
+                webClientId: '560988453952-vmoo9u50e20gcukqvp17r9sf1cmrnedi.apps.googleusercontent.com',
+            });
+            GoogleSignin.hasPlayServices().then((hasPlayService) => {
+                if (hasPlayService) {
+                    GoogleSignin.signIn().then((userInfo) => {
+                        console.log(JSON.stringify(userInfo))
+                    }).catch((e) => {
+                        console.log("ERROR IS: " + JSON.stringify(e));
+                    })
+                }
+            }).catch((e) => {
+                console.log("ERROR IS: " + JSON.stringify(e));
+            })
+        }
+    }
     return (
         <View style={styles.container}>
             <Header title="MY ACCOUNT" type="arrow-left" navigation={navigation} />
@@ -98,6 +132,7 @@ export default function SignInScreen({ navigation }) {
                                     value={props.values.email}
 
                                 />
+
                             </View>
 
                             <View style={styles.textInput2}>
@@ -109,6 +144,7 @@ export default function SignInScreen({ navigation }) {
                                         size={28}
                                     />
                                 </Animatable.View>
+
                                 <TextInput style={{ width: "80%", marginLeft: 5 }} placeholder="Password" ref={textInput2}
                                     onChangeText={props.handleChange('password')} value={props.values.password}
 
@@ -120,6 +156,7 @@ export default function SignInScreen({ navigation }) {
                                         setTextInput2Focused(true)
                                     }} />
 
+
                                 <Animatable.View animation={textInput2Focused ? "" : "fadeInLeft"} duration={400}>
                                     <Icon
                                         ios="ios-eye-off"
@@ -129,11 +166,12 @@ export default function SignInScreen({ navigation }) {
                                         size={28}
                                     />
                                 </Animatable.View>
+
                             </View>
                         </View>
 
                         <View style={{ marginHorizontal: 20, marginTop: 30 }}>
-                            <TouchableOpacity style={parameters.buttonStyle} onPress={props.handleSubmit}>
+                            <TouchableOpacity style={parameters.buttonStyle} onPress={() => { navigation.navigate('RootClientTabs') }}>
                                 <Text style={parameters.buttonTitle}>SIGN IN</Text>
                             </TouchableOpacity>
                         </View>
@@ -151,21 +189,21 @@ export default function SignInScreen({ navigation }) {
                 <Text style={{ fontSize: 20, fontWeight: "bold" }}>OR</Text>
             </View>
             <View style={{ marginHorizontal: 20, marginTop: 30 }}>
-                <TouchableOpacity style={parameters.buttonStyleFacebook} onPress={signInWithfb}>
+                <TouchableOpacity style={parameters.buttonStyleFacebook} onPress={signInWithFacebook}>
 
                     <Text style={parameters.buttonTitle}>
                         <Image source={{ uri: 'https://www.grez-doiceau.be/ma-commune/social/epn/images/logo-facebook.png/@@images/image.png' }}
-                            style={{ width: 20, height: 20, marginRight: 20 }} />  Sign in With Facebook
+                            style={{ width: 30, height: 25, marginRight: 20 }} />  Sign in With Facebook
                     </Text>
 
                 </TouchableOpacity>
             </View>
             <View style={{ marginHorizontal: 20, marginTop: 20 }}>
-                <TouchableOpacity style={parameters.buttonStyleGoogle} onPress={() => { }}>
+                <TouchableOpacity style={parameters.buttonStyleGoogle} onPress={signInWithGoogle}>
 
                     <Text style={parameters.buttonTitle}>
                         <Image source={{ uri: 'https://pourron.com/wp-content/uploads/2015/09/nouveau-logo-google-plus-rond.png' }}
-                            style={{ width: 20, height: 20, marginRight: 20 }} />  Sign in With Google
+                            style={{ width: 25, height: 25, marginRight: 20 }} />  Sign in With Google
                     </Text>
                 </TouchableOpacity>
             </View>
@@ -191,6 +229,11 @@ const styles = StyleSheet.create({
     text1: {
         color: colors.grey3,
         fontSize: 16
+    },
+    texterror: {
+        color: colors.error,
+
+
     },
 
     textInput1: {
