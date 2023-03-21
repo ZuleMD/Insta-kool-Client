@@ -6,6 +6,7 @@ export const filterData = [
     { name: "Chinese", image: require("../assets/chinese.png"), id: "4" },
     { name: "Mexican", image: require("../assets/mexican.png"), id: "5" },
     { name: "Sea food", image: require("../assets/seafood.png"), id: "6" },
+
 ];
 
 
