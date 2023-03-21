@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, FlatList, Pressable, Image, Dimensions, StatusBar } from 'react-native';
 import Icon from 'react-native-ionicons';
 import Countdown from 'react-native-countdown-component'
 import HomeHeader from '../components/HomeHeader';
 import { colors } from '../global/styles';
-import { filterData, restaurantsData } from '../global/Data'
+import firestore from '@react-native-firebase/firestore';
 import FoodCard from '../components/FoodCard';
 
 
@@ -14,6 +14,41 @@ export default function HomeScreen({ navigation }) {
 
     const [delivery, setDelivery] = useState(true)
     const [indexCheck, setIndexCheck] = useState("0")
+    const [restaurantsData, setRestaurantsData] = useState([]);
+    const [categoriesData, setCategoriesData] = useState([]);
+
+
+    useEffect(() => {
+        const unsubscribe = firestore()
+            .collection('restaurants')
+            .onSnapshot(querySnapshot => {
+                const data = [];
+                querySnapshot.forEach(documentSnapshot => {
+                    data.push({
+                        id: documentSnapshot.id,
+                        ...documentSnapshot.data(),
+                    });
+                });
+                setRestaurantsData(data);
+            });
+        return unsubscribe;
+    }, []);
+
+    useEffect(() => {
+        const unsubscribe = firestore()
+            .collection('categories')
+            .onSnapshot(querySnapshot => {
+                const data = [];
+                querySnapshot.forEach(documentSnapshot => {
+                    data.push({
+                        id: documentSnapshot.id,
+                        ...documentSnapshot.data(),
+                    });
+                });
+                setCategoriesData(data);
+            });
+        return unsubscribe;
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -99,7 +134,7 @@ export default function HomeScreen({ navigation }) {
                     <FlatList
                         horizontal={true}
                         showsHorizontalScrollIndicator={false}
-                        data={filterData}
+                        data={categoriesData}
                         keyExtractor={(item) => item.id}
                         extraData={indexCheck}
                         renderItem={({ item, index }) => (
@@ -108,8 +143,8 @@ export default function HomeScreen({ navigation }) {
                             >
                                 <View style={indexCheck === item.id ? { ...styles.smallCardSelected } : { ...styles.smallCard }}>
                                     <Image
-                                        style={{ height: 60, width: 60, borderRadius: 30 }}
-                                        source={item.image}
+                                        style={{ height: 60, width: 60 }}
+                                        source={{ uri: item.img }}
                                     />
 
                                     <View>
@@ -149,12 +184,10 @@ export default function HomeScreen({ navigation }) {
                             <View style={{ marginRight: 5 }}>
                                 <FoodCard
                                     screenWidth={SCREEN_WIDTH * 0.8}
-                                    images={item.images}
-                                    restaurantName={item.restaurantName}
-                                    farAway={item.farAway}
-                                    businessAddress={item.businessAddress}
-                                    averageReview={item.averageReview}
-                                    numberOfReview={item.numberOfReview}
+                                    images={item.img}
+                                    restaurantName={item.name}
+                                    phone={item.phone}
+                                    businessAddress={item.address}
 
                                 />
                             </View>
@@ -178,12 +211,10 @@ export default function HomeScreen({ navigation }) {
                             <View style={{ marginRight: 5 }}>
                                 <FoodCard
                                     screenWidth={SCREEN_WIDTH * 0.8}
-                                    images={item.images}
-                                    restaurantName={item.restaurantName}
-                                    farAway={item.farAway}
-                                    businessAddress={item.businessAddress}
-                                    averageReview={item.averageReview}
-                                    numberOfReview={item.numberOfReview}
+                                    images={item.img}
+                                    restaurantName={item.name}
+                                    phone={item.phone}
+                                    businessAddress={item.address}
 
                                 />
                             </View>
@@ -202,12 +233,11 @@ export default function HomeScreen({ navigation }) {
                             <View key={item.id} style={{ paddingBottom: 20 }}>
                                 <FoodCard
                                     screenWidth={SCREEN_WIDTH * 0.95}
-                                    images={item.images}
-                                    restaurantName={item.restaurantName}
-                                    farAway={item.farAway}
-                                    businessAddress={item.businessAddress}
-                                    averageReview={item.averageReview}
-                                    numberOfReview={item.numberOfReview}
+                                    images={item.img}
+                                    restaurantName={item.name}
+                                    phone={item.phone}
+                                    businessAddress={item.address}
+
 
                                 />
                             </View>

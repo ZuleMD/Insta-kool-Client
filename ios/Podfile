@@ -15,6 +15,8 @@ target 'instakooldelivery' do
 
   pod 'react-native-safe-area-context', :path => '../node_modules/react-native-safe-area-context'
 
+  pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+
   target 'instakooldeliveryTests' do
     inherit! :complete
     # Pods for testing

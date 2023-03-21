@@ -1,12 +1,30 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, FlatList, ImageBackground, Dimensions, TouchableWithoutFeedback, ImageBackgroundComponent } from 'react-native'
 import SearchComponent from '../components/SearchComponent'
-import { filterData2 } from "../global/Data"
 import { colors } from "../global/styles";
+import firestore from '@react-native-firebase/firestore';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 export default function SearchScreen({ navigation }) {
+
+    const [categoriesData, setCategoriesData] = useState([]);
+
+    useEffect(() => {
+        const unsubscribe = firestore()
+            .collection('categories')
+            .onSnapshot(querySnapshot => {
+                const data = [];
+                querySnapshot.forEach(documentSnapshot => {
+                    data.push({
+                        id: documentSnapshot.id,
+                        ...documentSnapshot.data(),
+                    });
+                });
+                setCategoriesData(data);
+            });
+        return unsubscribe;
+    }, []);
 
     return (
         <View style={{ flex: 1, marginBottom: 10, paddingTop: 20 }}>
@@ -17,22 +35,22 @@ export default function SearchScreen({ navigation }) {
                 <View>
                     <FlatList
                         style={{}}
-                        data={filterData2}
+                        data={categoriesData}
                         keyExtractor={item => item.id}
                         renderItem={({ item, index }) => (
                             <TouchableWithoutFeedback
                                 onPress={() => {
-                                    navigation.navigate("SearchResultScreen", { item: item.name })
+                                    navigation.navigate("SearchResultScreen", { item: item.categoryName })
                                 }}
                             >
                                 <View style={styles.imageView}>
                                     <ImageBackground
                                         style={styles.image}
-                                        source={{ uri: item.image }}
+                                        source={{ uri: item.img }}
                                     >
 
                                         <View style={styles.textView}>
-                                            <Text style={{ color: colors.cardbackground }}>{item.name}</Text>
+                                            <Text style={{ color: colors.cardbackground }}>{item.categoryName}</Text>
                                         </View>
                                     </ImageBackground>
                                 </View>
@@ -42,8 +60,8 @@ export default function SearchScreen({ navigation }) {
                         horizontal={false}
                         showsverticalScrollIndicator={false}
                         numColumns={2}
-                        ListHeaderComponent={<Text style={styles.listHeader}>Top Categories</Text>}
-                        ListFooterComponent={<Footer />}
+                        ListHeaderComponent={<Text style={styles.listHeader}>All Categories</Text>}
+
                     />
                 </View>
 
@@ -55,49 +73,6 @@ export default function SearchScreen({ navigation }) {
 }
 
 
-
-const Footer = () => {
-    return (
-        <View style={{ marginTop: 20, marginBottom: 30 }}>
-
-            <View style={{}}>
-                <FlatList
-                    style={{ marginBottom: 10 }}
-                    data={filterData2}
-                    keyExtractor={item => item.id}
-                    renderItem={({ item, index }) => (
-                        <TouchableWithoutFeedback
-                            onPress={() => {
-                                navigation.navigate("SearchResultScreen", { item: item.name })
-                            }}
-                        >
-                            <View style={styles.imageView}>
-                                <ImageBackground
-                                    style={styles.image}
-                                    source={{ uri: item.image }}
-                                >
-
-                                    <View style={styles.textView}>
-                                        <Text style={{ color: colors.cardbackground }}>{item.name}</Text>
-                                    </View>
-                                </ImageBackground>
-                            </View>
-                        </TouchableWithoutFeedback>
-                    )}
-
-                    horizontal={false}
-                    showsverticalScrollIndicator={false}
-                    numColumns={2}
-                    ListHeaderComponent={<Text style={styles.listHeader}>More categories</Text>}
-
-                />
-            </View>
-
-
-        </View>
-
-    )
-}
 
 
 

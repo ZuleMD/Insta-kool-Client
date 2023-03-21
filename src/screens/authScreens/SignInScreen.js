@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useContext } from 'react';
 import { View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity, Image, Alert } from 'react-native'
 import { colors, parameters, title } from "../../global/styles"
 import Header from "../../components/Header"
@@ -9,8 +9,12 @@ import auth from '@react-native-firebase/auth'
 import { AccessToken, LoginManager } from 'react-native-fbsdk'
 
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import { SignInContext } from '../../contexts/authContext';
+
 
 export default function SignInScreen({ navigation }) {
+    const { dispatchSignedIn } = useContext(SignInContext)
+
     const [textInput2Focused, setTextInput2Focused] = useState(false)
 
     const textInput1 = useRef(1)
@@ -23,7 +27,7 @@ export default function SignInScreen({ navigation }) {
             if (email != "" && password != "") {
                 const user = await auth().signInWithEmailAndPassword(email, password)
                 if (user) {
-                    console.log("Signed in")
+                    dispatchSignedIn({ type: "UPDATE_SIGN_IN", payload: { userToken: "signed-in" } })
                 }
             } else if (email == "") {
                 Alert.alert("Error", "Email cannot be empty ")
@@ -154,7 +158,11 @@ export default function SignInScreen({ navigation }) {
 
                                     onBlur={() => {
                                         setTextInput2Focused(true)
-                                    }} />
+                                    }}
+                                    secureTextEntry={true}  // Set the input type to "password"
+
+
+                                />
 
 
                                 <Animatable.View animation={textInput2Focused ? "" : "fadeInLeft"} duration={400}>
@@ -171,7 +179,7 @@ export default function SignInScreen({ navigation }) {
                         </View>
 
                         <View style={{ marginHorizontal: 20, marginTop: 30 }}>
-                            <TouchableOpacity style={parameters.buttonStyle} onPress={() => { navigation.navigate('RootClientTabs') }}>
+                            <TouchableOpacity style={parameters.buttonStyle} onPress={props.handleSubmit}>
                                 <Text style={parameters.buttonTitle}>SIGN IN</Text>
                             </TouchableOpacity>
                         </View>

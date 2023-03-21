@@ -1,18 +1,18 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { StyleSheet, Text, View, TouchableWithoutFeedback, Modal, TextInput, FlatList, TouchableOpacity, Keyboard } from 'react-native'
 import * as Animatable from 'react-native-animatable';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-ionicons';
 import { colors } from "../global/styles"
-import { filterData } from '../global/Data';
-import filter from 'lodash/filter'
+import firestore from '@react-native-firebase/firestore';
 
 
 export default function SearchComponent() {
 
     const navigation = useNavigation();
 
-    const [data, setData] = useState([...filterData])
+    const [categoriesData, setCategoriesData] = useState([]);
+    const [data, setData] = useState([...categoriesData])
     const [modalVisible, setModalVisible] = useState(false)
     const [textInputFossued, setTextInputFossued] = useState(true)
     const textInput = useRef(0)
@@ -26,13 +26,24 @@ export default function SearchComponent() {
     }
 
 
-    const handleSearch = text => {
-        const dataS = filter(filterData, userSearch => {
-            return contains(userSearch, text)
-        })
+    useEffect(() => {
+        const unsubscribe = firestore()
+            .collection('categories')
+            .onSnapshot(querySnapshot => {
+                const data = [];
+                querySnapshot.forEach(documentSnapshot => {
+                    data.push({
+                        id: documentSnapshot.id,
+                        ...documentSnapshot.data(),
+                    });
+                });
+                setCategoriesData(data);
+            });
+        return unsubscribe;
+    }, []);
 
-        setData([...dataS])
-    }
+
+
 
     return (
         <View style={{ alignItems: "center" }}>
@@ -91,7 +102,6 @@ export default function SearchComponent() {
                                     setTextInputFossued(false)
                                 }}
 
-                                onChangeText={handleSearch}
                             />
 
                             <Animatable.View
@@ -105,7 +115,6 @@ export default function SearchComponent() {
                                     style={{ marginRight: -10 }}
                                     onPress={() => {
                                         textInput.current.clear()
-                                        // handleSearch()          
                                     }}
                                 />
                             </Animatable.View>
@@ -114,18 +123,18 @@ export default function SearchComponent() {
 
 
                     <FlatList
-                        data={data}
+                        data={categoriesData}
                         renderItem={({ item }) => (
                             <TouchableOpacity
                                 onPress={() => {
 
                                     Keyboard.dismiss
-                                    navigation.navigate("SearchResultScreen", { item: item.name })
+                                    navigation.navigate("SearchResultScreen", { item: item.categoryName })
                                     setModalVisible(false)
                                     setTextInputFossued(true)
                                 }} >
                                 <View style={styles.view2}>
-                                    <Text style={{ color: colors.grey2, fontSize: 15 }}>{item.name}</Text>
+                                    <Text style={{ color: colors.grey2, fontSize: 15 }}>{item.categoryName}</Text>
                                 </View>
                             </TouchableOpacity>
                         )}

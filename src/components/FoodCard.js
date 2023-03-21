@@ -12,7 +12,7 @@ export default function FoodCard({
     discountPercent,
     numberOfReview,
     businessAddress,
-    farAway,
+    phone,
     averageReview,
     images,
     screenWidth
@@ -42,11 +42,20 @@ export default function FoodCard({
                                 style={{ marginTop: 7 }}
 
                             />
-                            <Text style={styles.Min}> {farAway} Min</Text>
+                            <Text style={styles.address}>{businessAddress}</Text>
                         </View>
 
                         <View style={{ flex: 9, flexDirection: "row" }}>
-                            <Text style={styles.address}>{businessAddress}</Text>
+                            <Icon
+                                ios="ios-call"
+                                android="md-call"
+                                color={colors.grey2}
+                                size={12}
+                                style={{ marginTop: 7, marginLeft: 5 }}
+
+                            />
+                            <Text style={styles.Min}> {phone}</Text>
+
                         </View>
 
                     </View>
@@ -58,8 +67,8 @@ export default function FoodCard({
 
 
             <View style={styles.review}>
-                <Text style={styles.average}>{averageReview}</Text>
-                <Text style={styles.numberOfReview}>{numberOfReview} reviews</Text>
+                <Text style={styles.average}>4.9</Text>
+                <Text style={styles.numberOfReview}>10 reviews</Text>
             </View>
         </TouchableOpacity>
     )

@@ -32,11 +32,12 @@ export const restaurantsData = [
         businessAddress: "22 Bessie street, Cape Town", images: 'https://i.insider.com/62212e77d72a250019740059?width=700',
         averageReview: 4.9, numberOfReview: 272, coordinates: { lat: -26.1888612, lng: 28.246325 }, discount: 10, deliveryTime: 15,
         collectTime: 5, foodType: "Burgers, Wraps,Milkshakes...",
-        productData: [{ name: "Hand cut chips", price: 29.30, image: "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2019/7/16/7/hand-cut-french-fries-7131181.jpg.rend.hgtvcom.616.462.suffix/1563299108774.jpeg" },
-        { name: "Big Mac", price: 50.80, image: "https://i.insider.com/5528448869bedde02540432e?width=750&format=jpeg&auto=webp" }, {
-            name: "Chicken Burger",
-            price: 70, image: "https://www.kitchensanctuary.com/wp-content/uploads/2019/08/Crispy-Chicken-Burger-square-FS-4518.jpg"
-        },
+        productData: [
+            { name: "Hand cut chips", price: 29.30, image: "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2019/7/16/7/hand-cut-french-fries-7131181.jpg.rend.hgtvcom.616.462.suffix/1563299108774.jpeg" },
+            { name: "Big Mac", price: 50.80, image: "https://i.insider.com/5528448869bedde02540432e?width=750&format=jpeg&auto=webp" }, {
+                name: "Chicken Burger",
+                price: 70, image: "https://www.kitchensanctuary.com/wp-content/uploads/2019/08/Crispy-Chicken-Burger-square-FS-4518.jpg"
+            },
         ],
         id: 0
     },
@@ -54,10 +55,13 @@ export const restaurantsData = [
     },
 
     {
-        restaurantName: "Steers", farAway: "5", businessAddress: " 17 Olivia Rd, Johannesburg",
+        restaurantName: "Steers", farAway: "5",
+        businessAddress: " 17 Olivia Rd, Johannesburg",
         images: 'https://tb-static.uber.com/prod/image-proc/processed_images/15d6e97965c2cd4b026cfce36d498191/9ba9ffab5f885fc3dac87838b3357014.jpeg',
-        coordinates: { lat: -26.1886781, lng: 28.244879 }, averageReview: 4.9, numberOfReview: 1272,
-        discount: 12, deliveryTime: 25, collectTime: 15, foodType: "Flame grilled beef Burgers",
+        coordinates: { lat: -26.1886781, lng: 28.244879 },
+        averageReview: 4.9, numberOfReview: 1272,
+        discount: 12, deliveryTime: 25, collectTime: 15,
+        foodType: "Flame grilled beef Burgers",
         productData: [{ name: "Hand cut chips", price: 29.30, image: "https://bukasapics.s3.us-east-2.amazonaws.com/plate5.png" },
         { name: "Big Mac", price: 50.80, image: "https://bukasapics.s3.us-east-2.amazonaws.com/plate4.png" }, {
             name: "Chicken Burger",

@@ -123,6 +123,8 @@ const SignUpScreen = ({ navigation }) => {
                                     value={props.values.password}
                                     onFocus={() => { setPassordFocussed(true) }}
                                     onBlur={() => { setPasswordBlured(true) }}
+                                    secureTextEntry={true}  // Set the input type to "password"
+
                                 />
                                 <Animatable.View animation={passwordBlured ? "fadeInLeft" : "fadeInRight"} duration={400}>
                                     <Icon

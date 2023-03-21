@@ -13,7 +13,7 @@ export default function HomeHeader({ navigation }) {
             <View style={{ alignItems: "center", justifyContent: 'center', marginLeft: 15 }}>
 
                 <TouchableOpacity onPress={() => {
-                    navigation.toggleDrawer()
+                    navigation.toggleDrawer();
                 }}>
                     <Icon
                         ios="ios-menu"
@@ -27,7 +27,7 @@ export default function HomeHeader({ navigation }) {
             </View>
 
             <View style={{ alignItems: "center", justifyContent: "center" }}>
-                <Text style={{ color: colors.cardbackground, fontSize: 25, fontWeight: 'bold' }}>XpressFood</Text>
+                <Text style={{ color: colors.cardbackground, fontSize: 25, fontWeight: 'bold' }}>Insta kool</Text>
             </View>
 
             <View style={{ alignItems: "center", justifyContent: "center", marginRight: 15 }}>
