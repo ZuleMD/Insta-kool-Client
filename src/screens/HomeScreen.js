@@ -21,6 +21,7 @@ export default function HomeScreen({ navigation }) {
     useEffect(() => {
         const unsubscribe = firestore()
             .collection('restaurants')
+            .where('status', '==', "active")
             .onSnapshot(querySnapshot => {
                 const data = [];
                 querySnapshot.forEach(documentSnapshot => {
@@ -33,6 +34,7 @@ export default function HomeScreen({ navigation }) {
             });
         return unsubscribe;
     }, []);
+
 
     useEffect(() => {
         const unsubscribe = firestore()
@@ -138,21 +140,26 @@ export default function HomeScreen({ navigation }) {
                         keyExtractor={(item) => item.id}
                         extraData={indexCheck}
                         renderItem={({ item, index }) => (
+
                             <Pressable
-                                onPress={() => { setIndexCheck(item.id) }}
+                                onPress={() => {
+                                    setIndexCheck(item.id);
+                                    navigation.navigate("SearchResultScreen", { item: item.categoryName });
+                                }}
                             >
                                 <View style={indexCheck === item.id ? { ...styles.smallCardSelected } : { ...styles.smallCard }}>
                                     <Image
                                         style={{ height: 60, width: 60 }}
                                         source={{ uri: item.img }}
                                     />
-
                                     <View>
-                                        <Text style={indexCheck === item.id ? { ...styles.smallCardTextSected } :
-                                            { ...styles.smallCardText }}>{item.name}</Text>
+                                        <Text style={indexCheck === item.id ? { ...styles.smallCardTextSected } : { ...styles.smallCardText }}>
+                                            {item.name}
+                                        </Text>
                                     </View>
                                 </View>
                             </Pressable>
+
                         )}
                     />
                 </View>
@@ -180,7 +187,8 @@ export default function HomeScreen({ navigation }) {
                         data={restaurantsData}
                         keyExtractor={(item, index) => index.toString()}
                         showsHorizontalScrollIndicator={false}
-                        renderItem={({ item }) => (
+                        renderItem={({ item, index }) => (
+
                             <View style={{ marginRight: 5 }}>
                                 <FoodCard
                                     screenWidth={SCREEN_WIDTH * 0.8}
@@ -188,6 +196,7 @@ export default function HomeScreen({ navigation }) {
                                     restaurantName={item.name}
                                     phone={item.phone}
                                     businessAddress={item.address}
+                                    OnPressFoodCard={() => { navigation.navigate("RestaurantHomeScreen", { id: index, restaurant: item.restaurantName }) }}
 
                                 />
                             </View>

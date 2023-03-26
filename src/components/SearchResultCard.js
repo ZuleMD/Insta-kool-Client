@@ -15,6 +15,7 @@ const SearchResultCard = ({
     discountPercent,
     numberOfReview,
     businessAddress,
+    phone,
     farAway,
     averageReview,
     images,
@@ -50,18 +51,30 @@ const SearchResultCard = ({
 
                         <View style={{ flexDirection: "row" }}>
                             <View style={styles.view4}>
+
+
                                 <Icon
                                     ios="ios-pin"
                                     android="md-pin"
                                     color={colors.CardComment}
-                                    size={18}
-                                    style={{ marginTop: 3, marginLeft: -3 }}
-                                />
+                                    size={12}
+                                    style={{ marginTop: 7, marginLeft: -4 }}
 
-                                <Text style={styles.view5}>{farAway}Min</Text>
+                                />
+                                <Text style={styles.view5}>{businessAddress}</Text>
                             </View>
                             <View style={{ flex: 9 }}>
-                                <Text style={styles.text6}>{businessAddress}</Text>
+
+                                <Text style={styles.text6}>
+                                    <Icon
+                                        ios="ios-call"
+                                        android="md-call"
+                                        color={colors.grey2}
+                                        size={12}
+                                        style={{ marginRight: 5 }}
+
+                                    />{' '}
+                                    {phone}</Text>
                             </View>
 
                         </View>
@@ -80,8 +93,8 @@ const SearchResultCard = ({
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item, index }) => (
                         <ProductCard
-                            image={item.image}
-                            productName={item.name}
+                            img={item.img}
+                            name={item.name}
                             price={item.price}
                         />
                     )}
@@ -181,14 +194,16 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontWeight: 'bold',
         paddingTop: 5,
-        color: colors.grey3
+        color: colors.grey3,
+        marginLeft: 5
     },
 
     text6: {
         fontSize: 12,
-        paddingTop: 5,
-        color: colors.grey2,
-        paddingHorizontal: 10,
+        fontWeight: 'bold',
+        marginTop: 4,
+        marginLeft: 5,
+        color: colors.grey3
 
     }
 

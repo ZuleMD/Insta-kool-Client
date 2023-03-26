@@ -2,6 +2,7 @@
 export const colors = {
     buttons: "#89CFF0",
     grey1: "#43484d",
+    red: "#dd2c00",
     grey2: "#5e6977",
     grey3: "#86939e",
     grey4: "#bdc6cf",
