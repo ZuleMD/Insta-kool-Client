@@ -54,8 +54,8 @@ export default function DrawerContent(props) {
 
 
                         <View style={{ marginLeft: 10 }}>
-                            <Text style={{ fontWeight: 'bold', color: colors.cardbackground, fontSize: 18 }} >John Mark</Text>
-                            <Text style={{ color: colors.cardbackground, fontSize: 14 }} > john@xpressfood.com</Text>
+                            <Text style={{ fontWeight: 'bold', color: colors.cardbackground, fontSize: 18 }} >Mariem Derbali</Text>
+                            <Text style={{ color: colors.cardbackground, fontSize: 14 }} > md@instakool.com</Text>
                         </View>
 
                     </View>

@@ -1,13 +1,29 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity, Image, ScrollView } from 'react-native'
 import { colors, parameters, title } from "../../global/styles"
 import Header from "../../components/Header"
 import * as Animatable from 'react-native-animatable'
 import Icon from 'react-native-ionicons';
 import Swiper from 'react-native-swiper'
+import auth from '@react-native-firebase/auth';
+import { SignInContext } from '../../contexts/authContext';
 
 
 export default function SignInWelcomeScreen({ navigation }) {
+
+    const { dispatchSignedIn } = useContext(SignInContext)
+
+    useEffect(() => {
+        auth().onAuthStateChanged((user) => {
+            if (user) {
+                dispatchSignedIn({ type: "UPDATE_SIGN_IN", payload: { userToken: "signed-in" } })
+            } else {
+                dispatchSignedIn({ type: "UPDATE_SIGN_IN", payload: { userToken: null } })
+            }
+        })
+
+    }, [])
+
     return (
         <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'space-between' }} >
 

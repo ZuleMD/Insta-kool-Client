@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
 import { colors } from '../global/styles'
 
-const ProductCard = ({ name, price, img }) => {
+const ProductCard = ({ name, price, img, description }) => {
     return (
         <View style={styles.view1}>
             <View style={styles.view2}>

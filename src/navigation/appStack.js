@@ -6,6 +6,7 @@ import RestaurantMapScreen from '../screens/RestaurantMapScreen';
 import SearchResultScreen from '../screens/SearchResultScreen';
 import RestaurantHomeScreen from '../screens/RestaurantHomeScreen';
 import DrawerNavigator from './DrawerNavigator';
+import ProductDetailsScreen from '../screens/RestaurantTabs/ProductDetailsScreen';
 
 const App = createStackNavigator();
 
@@ -65,6 +66,18 @@ export function AppStack() {
                     ...TransitionPresets.RevealFromBottomAndroid
                 }}
             />
+
+            <App.Screen
+                name="ProductDetailsScreen"
+                component={ProductDetailsScreen}
+                options={{
+                    headerShown: false,
+                    ...TransitionPresets.RevealFromBottomAndroid
+                }}
+            />
+
+
+
 
         </App.Navigator>
     )

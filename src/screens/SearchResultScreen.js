@@ -59,7 +59,7 @@ const SearchResultScreen = ({ navigation, route }) => {
                             businessAddress={item.address}
                             phone={item.phone}
                             productData={item.products}
-                            OnPressRestaurantCard={() => { navigation.navigate("RestaurantHomeScreen", { id: index, restaurant: item.restaurantName }) }}
+                            OnPressRestaurantCard={() => { navigation.navigate("RestaurantHomeScreen", { id: index, restaurant: item.name }) }}
                         />
 
                     )}

@@ -196,7 +196,7 @@ export default function HomeScreen({ navigation }) {
                                     restaurantName={item.name}
                                     phone={item.phone}
                                     businessAddress={item.address}
-                                    OnPressFoodCard={() => { navigation.navigate("RestaurantHomeScreen", { id: index, restaurant: item.restaurantName }) }}
+                                    OnPressFoodCard={() => { navigation.navigate("RestaurantHomeScreen", { id: index, restaurant: item.name }) }}
 
                                 />
                             </View>
