@@ -1,12 +1,60 @@
 import React, { useState, useEffect } from 'react'
-import { Text, StyleSheet, View, ScrollView, Image, Platform } from 'react-native'
+import { Text, StyleSheet, View, Image, Platform, TouchableOpacity, Alert } from 'react-native'
 import Icon from 'react-native-ionicons';
 import { colors } from "../../global/styles";
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 
 const ProductDetailsScreen = ({ navigation, route }) => {
     const { product } = route.params;
     const [finalPrice, setFinalPrice] = useState(1);
+
+    const addToCart = () => {
+        const currentUser = auth().currentUser;
+        if (currentUser) {
+            const email = currentUser.email;
+            const cartItem = {
+                product,
+                quantity: finalPrice,
+            };
+
+            const userRef = firestore().collection('users').where('email', '==', email);
+
+            userRef.get()
+                .then((querySnapshot) => {
+                    if (!querySnapshot.empty) {
+                        const doc = querySnapshot.docs[0];
+                        const userDocRef = firestore().collection('users').doc(doc.id);
+
+                        // User document exists, update the cart field
+                        userDocRef.update({
+                            cart: firestore.FieldValue.arrayUnion(cartItem),
+                        })
+                            .then(() => {
+                                console.log('Product added to cart successfully!');
+                                Alert.alert('Success', 'Product added to cart successfully!', [
+                                    {
+                                        text: 'OK',
+                                        onPress: () => navigation.navigate('CartScreen'), // Navigate to CartScreen
+                                    },
+                                ]);
+                            })
+                            .catch((error) => {
+                                console.error('Error adding product to cart:', error);
+                            });
+                    } else {
+                        console.log('User document not found');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error getting user document:', error);
+                });
+        } else {
+            console.log('User not authenticated');
+        }
+    };
+
 
     return (
         <View style={styles.container}>
@@ -60,13 +108,13 @@ const ProductDetailsScreen = ({ navigation, route }) => {
                     />
                 </View>
             </View>
-            <View style={styles.view17}>
+            <TouchableOpacity onPress={addToCart} style={styles.view17}>
                 <View style={styles.view18}>
-
-                    <Text style={styles.text10}> Add {finalPrice} to Cart {product.price * finalPrice} TND
+                    <Text style={styles.text10}>
+                        Add {finalPrice} to Cart {product.price * finalPrice} TND
                     </Text>
                 </View>
-            </View>
+            </TouchableOpacity>
         </View>
     )
 }

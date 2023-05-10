@@ -37,7 +37,7 @@ export default function ResetPasswordScreen({ navigation }) {
 
 
             <View style={{ alignItems: "center", marginTop: 10 }}>
-                <Text style={styles.text1} >Please enter the email to recieve the rest password link</Text>
+                <Text style={styles.text1} >Enter the email to recieve the rest password link</Text>
             </View>
 
             <Formik

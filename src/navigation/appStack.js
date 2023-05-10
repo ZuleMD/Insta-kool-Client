@@ -7,6 +7,7 @@ import SearchResultScreen from '../screens/SearchResultScreen';
 import RestaurantHomeScreen from '../screens/RestaurantHomeScreen';
 import DrawerNavigator from './DrawerNavigator';
 import ProductDetailsScreen from '../screens/RestaurantTabs/ProductDetailsScreen';
+import CartScreen from '../screens/CartScreen';
 
 const App = createStackNavigator();
 
@@ -70,6 +71,15 @@ export function AppStack() {
             <App.Screen
                 name="ProductDetailsScreen"
                 component={ProductDetailsScreen}
+                options={{
+                    headerShown: false,
+                    ...TransitionPresets.RevealFromBottomAndroid
+                }}
+            />
+
+            <App.Screen
+                name="CartScreen"
+                component={CartScreen}
                 options={{
                     headerShown: false,
                     ...TransitionPresets.RevealFromBottomAndroid

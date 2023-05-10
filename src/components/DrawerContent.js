@@ -1,31 +1,66 @@
 import React, { useState, useContext, useEffect } from 'react';
 import auth from '@react-native-firebase/auth';
-
-import {
-    View,
-    Text,
-
-    Switch,
-    StyleSheet,
-
-} from 'react-native'
-
-import {
-    DrawerContentScrollView,
-    DrawerItemList,
-    DrawerItem,
-
-} from '@react-navigation/drawer';
-
+import { View, Text, Switch, StyleSheet, TouchableOpacity } from 'react-native'
+import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import Icon from 'react-native-ionicons';
-
 import { colors } from '../global/styles'
 import { SignInContext } from '../contexts/authContext';
+import { useNavigation } from '@react-navigation/native';
 
+import firestore from '@react-native-firebase/firestore';
 
 export default function DrawerContent(props) {
 
+    const [displayName, setDisplayName] = useState('');
+    const [email, setUserEmail] = useState('');
+    const [cartitemsnumber, setCartItemsNumber] = useState(0);
     const { dispatchSignedIn } = useContext(SignInContext)
+    const navigation = useNavigation();
+
+    const handleNavigateToCartScreen = (item) => {
+        navigation.navigate('CartScreen');
+
+    };
+
+
+    useEffect(() => {
+        const unsubscribe = firestore()
+            .collection('users')
+            .where('email', '==', email)
+            .onSnapshot(querySnapshot => {
+                const data = [];
+                querySnapshot.forEach(documentSnapshot => {
+                    data.push({
+                        id: documentSnapshot.id,
+                        ...documentSnapshot.data(),
+                    });
+                });
+
+                if (data.length > 0) {
+                    const userData = data[0];
+                    const cartItemsLength = userData.cart.length;
+                    setCartItemsNumber(cartItemsLength);
+                }
+            });
+
+        return unsubscribe;
+    }, [email]);
+
+    useEffect(() => {
+        const fetchUserName = async () => {
+            const user = auth().currentUser;
+            if (user) {
+
+                setDisplayName(user.displayName);
+                setUserEmail(user.email);
+                console.log(user);
+
+            }
+        };
+
+        fetchUserName();
+    }, []);
+
 
     async function signOut() {
 
@@ -53,9 +88,9 @@ export default function DrawerContent(props) {
                     }}>
 
 
-                        <View style={{ marginLeft: 10 }}>
-                            <Text style={{ fontWeight: 'bold', color: colors.cardbackground, fontSize: 18 }} >Mariem Derbali</Text>
-                            <Text style={{ color: colors.cardbackground, fontSize: 14 }} > md@instakool.com</Text>
+                        <View style={{ marginLeft: 50 }}>
+                            <Text style={{ fontWeight: 'bold', color: colors.cardbackground, fontSize: 18 }} >{displayName}</Text>
+                            <Text style={{ color: colors.cardbackground, fontSize: 14 }} >{email}</Text>
                         </View>
 
                     </View>
@@ -69,12 +104,14 @@ export default function DrawerContent(props) {
                             </View>
                         </View>
 
-                        <View style={{ flexDirection: 'row', marginTop: 0 }}>
-                            <View style={{ marginLeft: 10, alignItems: "center", justifyContent: "center" }}  >
-                                <Text style={{ fontWeight: 'bold', color: colors.cardbackground, fontSize: 18 }}>0</Text>
-                                <Text style={{ color: colors.cardbackground, fontSize: 14 }} >My Cart</Text>
+                        <TouchableOpacity onPress={handleNavigateToCartScreen}>
+                            <View style={{ flexDirection: 'row', marginTop: 0 }}>
+                                <View style={{ marginLeft: 10, alignItems: "center", justifyContent: "center" }}  >
+                                    <Text style={{ fontWeight: 'bold', color: colors.cardbackground, fontSize: 18 }}>{cartitemsnumber}</Text>
+                                    <Text style={{ color: colors.cardbackground, fontSize: 14 }} >My Cart</Text>
+                                </View>
                             </View>
-                        </View>
+                        </TouchableOpacity>
 
                     </View>
                 </View>
@@ -194,8 +231,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1
     },
-
-
     preferences: {
         fontSize: 16,
         color: colors.grey2,

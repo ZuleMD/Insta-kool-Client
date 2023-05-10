@@ -34,16 +34,17 @@ export default function Header({ title, navigation }) {
 
 const styles = StyleSheet.create({
     header: {
-        flexDirection: "row",
+
+        flexDirection: 'row',
         backgroundColor: colors.buttons,
-        height: parameters.headerHeight
+        height: parameters.headerHeight,
     },
 
     headerText: {
         color: colors.headerText,
         fontSize: 22,
         fontWeight: "bold",
-        marginLeft: 30
+        marginLeft: 100
     },
 
 })

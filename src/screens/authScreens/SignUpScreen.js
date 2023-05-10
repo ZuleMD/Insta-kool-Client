@@ -6,36 +6,63 @@ import * as Animatable from 'react-native-animatable';
 import Icon from 'react-native-ionicons';
 import auth from '@react-native-firebase/auth';
 import { Formik } from 'formik';
+import firestore from '@react-native-firebase/firestore';
+import uuid from 'react-native-uuid';
 
-const initialValues = { phone_number: '', first_name: "", last_name: "", password: "", email: '', username: '' }
+
+
+const initialValues = { firstName: "", lastName: "", phoneNumber: "", address: "", password: "", email: "" }
 
 const SignUpScreen = ({ navigation }) => {
     const [passwordFocussed, setPassordFocussed] = useState(false)
     const [passwordBlured, setPasswordBlured] = useState(false)
 
     async function signUp(values) {
-        const { email, password } = values
-
+        const { firstName, lastName, phoneNumber, address, password, email } = values;
+        const userId = uuid.v4();
         try {
-            if (email)
-                await auth().createUserWithEmailAndPassword(email, password)
-            console.log("USER ACCOUNT CREATED")
+            if (email) {
+                await auth().createUserWithEmailAndPassword(email, password);
+
+                const user = auth().currentUser;
+
+                if (user) {
+
+                    // Update user profile with additional information
+                    await user.updateProfile({
+                        displayName: `${firstName} ${lastName}`,
+                    });
+
+                    // Save additional information to Firestore
+                    await firestore()
+                        .collection('users')
+                        .doc(userId)
+                        .set({
+                            firstName: firstName,
+                            email: email,
+                            lastName: lastName,
+                            phoneNumber: phoneNumber,
+                            address: address,
+                            userId: userId,
+                            cart: [],
+                        })
+                }
+                console.log("USER ACCOUNT CREATED");
+                console.log(user); // Check the user object to see if displayName is set correctly
+            }
         } catch (error) {
             if (error.code === 'auth/email-already-in-use') {
-                Alert.alert(
-                    'That email address is already in use!'
-                )
-            }
-            if (error.code === 'auth/invalid-email') {
-                Alert.alert(
-                    'That email address is invalid'
-                )
-            }
-            else {
-                Alert.alert(error.code)
+                Alert.alert('That email address is already in use!');
+            } else if (error.code === 'auth/invalid-email') {
+                Alert.alert('That email address is invalid');
+            } else {
+                Alert.alert(error.code);
             }
         }
     }
+
+
+
 
     return (
         <View style={styles.container}>
@@ -50,24 +77,14 @@ const SignUpScreen = ({ navigation }) => {
                             <View>
                                 <Text style={styles.text2}>New on Insta-kool ?</Text>
                             </View>
-                            <View style={styles.view6}>
-                                <TextInput
-                                    placeholder="Mobile Number"
-                                    style={styles.input1}
-                                    keyboardType="number-pad"
-                                    autoFocus={true}
-                                    onChangeText={props.handleChange('phone_number')}
-                                    value={props.values.phone_number}
 
-                                />
-                            </View>
                             <View style={styles.view6}>
                                 <TextInput
                                     placeholder="First name"
                                     style={styles.input1}
                                     autoFocus={false}
-                                    onChangeText={props.handleChange('first_name')}
-                                    value={props.values.first_name}
+                                    onChangeText={props.handleChange('firstName')}
+                                    value={props.values.firstName}
 
                                 />
                             </View>
@@ -77,8 +94,31 @@ const SignUpScreen = ({ navigation }) => {
                                     placeholder="Last name"
                                     style={styles.input1}
                                     autoFocus={false}
-                                    onChangeText={props.handleChange('last_name')}
-                                    value={props.values.last_name}
+                                    onChangeText={props.handleChange('lastName')}
+                                    value={props.values.lastName}
+
+                                />
+                            </View>
+
+                            <View style={styles.view6}>
+                                <TextInput
+                                    placeholder="Mobile Number"
+                                    style={styles.input1}
+                                    keyboardType="number-pad"
+                                    autoFocus={true}
+                                    onChangeText={props.handleChange('phoneNumber')}
+                                    value={props.values.phoneNumber}
+
+                                />
+                            </View>
+
+                            <View style={styles.view6}>
+                                <TextInput
+                                    placeholder="Address"
+                                    style={styles.input1}
+                                    autoFocus={true}
+                                    onChangeText={props.handleChange('address')}
+                                    value={props.values.address}
 
                                 />
                             </View>
