@@ -39,6 +39,7 @@ export default function HomeScreen({ navigation }) {
     useEffect(() => {
         const unsubscribe = firestore()
             .collection('categories')
+            .where('status', '==', "active")
             .onSnapshot(querySnapshot => {
                 const data = [];
                 querySnapshot.forEach(documentSnapshot => {
