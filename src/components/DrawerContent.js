@@ -53,7 +53,6 @@ export default function DrawerContent(props) {
 
                 setDisplayName(user.displayName);
                 setUserEmail(user.email);
-                console.log(user);
 
             }
         };

@@ -8,6 +8,7 @@ import RestaurantHomeScreen from '../screens/RestaurantHomeScreen';
 import DrawerNavigator from './DrawerNavigator';
 import ProductDetailsScreen from '../screens/RestaurantTabs/ProductDetailsScreen';
 import CartScreen from '../screens/CartScreen';
+import MyOrdersScreen from '../screens/MyOrdersScreen';
 
 const App = createStackNavigator();
 
@@ -80,6 +81,14 @@ export function AppStack() {
             <App.Screen
                 name="CartScreen"
                 component={CartScreen}
+                options={{
+                    headerShown: false,
+                    ...TransitionPresets.RevealFromBottomAndroid
+                }}
+            />
+            <App.Screen
+                name="OrderScreen"
+                component={MyOrdersScreen}
                 options={{
                     headerShown: false,
                     ...TransitionPresets.RevealFromBottomAndroid

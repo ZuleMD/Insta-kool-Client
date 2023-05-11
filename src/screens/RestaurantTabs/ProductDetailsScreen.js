@@ -27,21 +27,40 @@ const ProductDetailsScreen = ({ navigation, route }) => {
                         const doc = querySnapshot.docs[0];
                         const userDocRef = firestore().collection('users').doc(doc.id);
 
-                        // User document exists, update the cart field
-                        userDocRef.update({
-                            cart: firestore.FieldValue.arrayUnion(cartItem),
-                        })
-                            .then(() => {
-                                console.log('Product added to cart successfully!');
-                                Alert.alert('Success', 'Product added to cart successfully!', [
-                                    {
-                                        text: 'OK',
-                                        onPress: () => navigation.navigate('CartScreen'), // Navigate to CartScreen
-                                    },
-                                ]);
+                        // User document exists, check if the product already exists in the cart
+                        userDocRef.get()
+                            .then((userDoc) => {
+                                const userData = userDoc.data();
+                                const cart = userData.cart || [];
+
+                                const existingItem = cart.find((item) => item.product.name === product.name);
+                                if (existingItem) {
+                                    // Product already exists in the cart, increment the quantity
+                                    existingItem.quantity += finalPrice;
+                                } else {
+                                    // Product does not exist in the cart, add it as a new item
+                                    cart.push(cartItem);
+                                }
+
+                                // Update the cart field in the user document
+                                userDocRef.update({
+                                    cart,
+                                })
+                                    .then(() => {
+                                        console.log('Product added to cart successfully!');
+                                        Alert.alert('Success', 'Product added to cart successfully!', [
+                                            {
+                                                text: 'OK',
+                                                onPress: () => navigation.navigate('CartScreen'), // Navigate to CartScreen
+                                            },
+                                        ]);
+                                    })
+                                    .catch((error) => {
+                                        console.error('Error adding product to cart:', error);
+                                    });
                             })
                             .catch((error) => {
-                                console.error('Error adding product to cart:', error);
+                                console.error('Error getting user document:', error);
                             });
                     } else {
                         console.log('User document not found');

@@ -6,8 +6,7 @@ import Icon from 'react-native-ionicons';
 import { TabView, TabBar } from 'react-native-tab-view';
 import MenuScreen from './RestaurantTabs/MenuScreen';
 import firestore from '@react-native-firebase/firestore';
-
-
+import auth from '@react-native-firebase/auth';
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 const initialLayout = SCREEN_WIDTH;
@@ -15,6 +14,54 @@ const initialLayout = SCREEN_WIDTH;
 const RestaurantHomeScreen = ({ navigation, route }) => {
     const [restaurantName, setRestaurantName] = useState([]);
     const [restaurantImage, setRestaurantImage] = useState([]);
+    const [cartitemsnumber, setCartItemsNumber] = useState(0);
+
+
+    const handleNavigateToCartScreen = (item) => {
+        navigation.navigate('CartScreen');
+
+    };
+
+
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const currentUser = auth().currentUser;
+                if (currentUser) {
+                    const email = currentUser.email;
+                    const unsubscribe = firestore()
+                        .collection('users')
+                        .where('email', '==', email)
+                        .onSnapshot(querySnapshot => {
+                            const data = [];
+                            querySnapshot.forEach(documentSnapshot => {
+                                data.push({
+                                    id: documentSnapshot.id,
+                                    ...documentSnapshot.data(),
+                                });
+                            });
+
+                            if (data.length > 0) {
+                                const userData = data[0];
+                                console.log(userData);
+                                const cartItemsLength = userData.cart.length;
+                                setCartItemsNumber(cartItemsLength);
+                            }
+                        });
+
+                    // Clean up the listener when the component unmounts
+                    return () => unsubscribe();
+                }
+            } catch (error) {
+                console.log('Error fetching user data: ', error);
+            }
+        };
+
+        fetchUserData();
+    }, []);
+
+
 
     const { restaurant } = route.params
     const [routes] = useState([
@@ -142,12 +189,12 @@ const RestaurantHomeScreen = ({ navigation, route }) => {
 
             </ScrollView>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleNavigateToCartScreen}>
                 <View style={styles.view11}>
                     <View style={styles.view12}>
                         <Text style={styles.text13}>View Cart</Text>
                         <View style={styles.view13}>
-                            <Text style={styles.text13}>0</Text>
+                            <Text style={styles.text13}>{cartitemsnumber}</Text>
                         </View>
                     </View>
                 </View>
