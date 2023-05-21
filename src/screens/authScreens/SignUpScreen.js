@@ -21,6 +21,31 @@ const SignUpScreen = ({ navigation }) => {
         const { firstName, lastName, phoneNumber, address, password, email } = values;
         const userId = uuid.v4();
         try {
+            switch (true) {
+                case firstName === "":
+                    alert("Error: First name cannot be empty");
+                    break;
+                case lastName === "":
+                    alert("Error: Last name cannot be empty");
+                    break;
+                case phoneNumber === "":
+                    alert("Error: Phone number cannot be empty");
+                    break;
+                case address === "":
+                    alert("Error: Address cannot be empty");
+                    break;
+                case password === "":
+                    alert("Error: Password cannot be empty");
+                    break;
+                case email === "":
+                    alert("Error: Email cannot be empty");
+                    break;
+                default:
+
+                    break;
+            }
+
+
             if (email) {
                 await auth().createUserWithEmailAndPassword(email, password);
 
@@ -428,6 +453,7 @@ const styles = StyleSheet.create({
 
     view21: {
         marginTop: 5,
+        marginBottom: 10,
         alignItems: 'flex-end',
     },
 

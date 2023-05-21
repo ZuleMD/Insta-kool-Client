@@ -88,24 +88,34 @@ export default function SignInScreen({ navigation }) {
         }
     }
 
+
+
     async function signInWithGoogle() {
-        {
+        try {
+            // Configure Google Sign-In
             GoogleSignin.configure({
                 webClientId: '560988453952-vmoo9u50e20gcukqvp17r9sf1cmrnedi.apps.googleusercontent.com',
             });
-            GoogleSignin.hasPlayServices().then((hasPlayService) => {
-                if (hasPlayService) {
-                    GoogleSignin.signIn().then((userInfo) => {
-                        console.log(JSON.stringify(userInfo))
-                    }).catch((e) => {
-                        console.log("ERROR IS: " + JSON.stringify(e));
-                    })
-                }
-            }).catch((e) => {
-                console.log("ERROR IS: " + JSON.stringify(e));
-            })
+
+            // Check if Play Services are available
+            const hasPlayServices = await GoogleSignin.hasPlayServices();
+            if (!hasPlayServices) {
+                throw new Error('Play Services are not available');
+            }
+
+            // Sign in with Google
+            const { idToken } = await GoogleSignin.signIn();
+            const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+            // Sign in to Firebase with Google credential
+            await auth().signInWithCredential(googleCredential);
+
+            console.log('Signed in with Google');
+        } catch (error) {
+            console.error('Google sign-in error:', error);
         }
     }
+
     return (
         <View style={styles.container}>
             <Header title="MY ACCOUNT" type="arrow-left" navigation={navigation} />
