@@ -8,7 +8,7 @@ export default function Header({ title, navigation }) {
 
     return (
         <View style={styles.header}>
-            <View style={{ marginLeft: 20 }}>
+            <View style={{ marginLeft: 10 }}>
                 <TouchableOpacity onPress={() => { navigation.goBack() }}>
 
                     <Icon

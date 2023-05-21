@@ -14,12 +14,9 @@ export default function ResetPasswordScreen({ navigation }) {
     async function passwordReset(data) {
         try {
             const { email } = data
-            const send = await auth().sendPasswordResetEmail(email)
-            if (send) {
-                console.log("Password reset email sent successfully")
-            } else {
-                console.log("didn't send")
-            }
+            await auth().sendPasswordResetEmail(email)
+            console.log("Password reset email sent successfully")
+
         }
         catch (error) {
             Alert.alert(

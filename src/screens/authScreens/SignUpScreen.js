@@ -100,7 +100,7 @@ const SignUpScreen = ({ navigation }) => {
                     {(props) => (
                         <View style={styles.view2}>
                             <View>
-                                <Text style={styles.text2}>New on Insta-kool ?</Text>
+                                <Text style={styles.text2}>New on Insta-Kool Delivery?</Text>
                             </View>
 
                             <View style={styles.view6}>
@@ -226,7 +226,7 @@ const SignUpScreen = ({ navigation }) => {
                 </View>
                 <View style={styles.view19}>
                     <View style={styles.view20}>
-                        <Text style={styles.text3}>Already have an account with Insta-kool?</Text>
+                        <Text style={styles.text3}>Already have an account with Insta-Kool Delivery?</Text>
                     </View>
                     <View style={styles.view21}>
                         <TouchableOpacity style={styles.button2} onPress={() => { navigation.navigate('SignInScreen') }}>

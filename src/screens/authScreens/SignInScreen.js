@@ -92,29 +92,23 @@ export default function SignInScreen({ navigation }) {
 
     async function signInWithGoogle() {
         try {
-            // Configure Google Sign-In
             GoogleSignin.configure({
                 webClientId: '560988453952-vmoo9u50e20gcukqvp17r9sf1cmrnedi.apps.googleusercontent.com',
             });
 
-            // Check if Play Services are available
-            const hasPlayServices = await GoogleSignin.hasPlayServices();
-            if (!hasPlayServices) {
-                throw new Error('Play Services are not available');
+            const hasPlayService = await GoogleSignin.hasPlayServices();
+            if (hasPlayService) {
+                const userInfo = await GoogleSignin.signIn();
+                const googleCredential = auth.GoogleAuthProvider.credential(userInfo.idToken);
+
+                await auth().signInWithCredential(googleCredential);
+                console.log('Signed in with Google');
             }
-
-            // Sign in with Google
-            const { idToken } = await GoogleSignin.signIn();
-            const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
-            // Sign in to Firebase with Google credential
-            await auth().signInWithCredential(googleCredential);
-
-            console.log('Signed in with Google');
         } catch (error) {
-            console.error('Google sign-in error:', error);
+            console.log('ERROR IS: ' + JSON.stringify(error));
         }
     }
+
 
     return (
         <View style={styles.container}>
@@ -226,7 +220,7 @@ export default function SignInScreen({ navigation }) {
                 </TouchableOpacity>
             </View>
             <View style={{ marginTop: 25, marginLeft: 20 }}>
-                <Text style={{ ...styles.text1, }}>New on Insta-kool ?</Text>
+                <Text style={{ ...styles.text1, }}>New on Insta-Kool Delivery ?</Text>
             </View>
             <View style={{ alignItems: "flex-end", marginHorizontal: 20 }}>
                 <TouchableOpacity style={styles.createbuttonStyle} onPress={() => { navigation.navigate("SignUpScreen") }}>
